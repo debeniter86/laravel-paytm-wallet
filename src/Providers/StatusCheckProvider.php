@@ -1,11 +1,12 @@
 <?php
 namespace Anand\LaravelPaytmWallet\Providers;
+use Anand\LaravelPaytmWallet\Facades\PaytmWallet;
 use Illuminate\Http\Request;
 // require __DIR__.'/../../lib/encdec_paytm.php';
 
 class StatusCheckProvider extends PaytmWalletProvider{
 	private $parameters = null;
-    private $response;
+    protected $response;
 
 	public function prepare($params = array()){
 		$defaults = [
