@@ -13,6 +13,7 @@ class PaytmWalletProvider{
 	protected $response;
 	protected $paytm_txn_url;
 	protected $paytm_txn_status_url;
+	protected $paytm_txn_status_new_url;
 	protected $paytm_balance_check_url;
 
 	protected $merchant_key;
@@ -32,6 +33,7 @@ class PaytmWalletProvider{
 		}
 		$this->paytm_txn_url = 'https://'.$domain.'/oltp-web/processTransaction';
 		$this->paytm_txn_status_url = 'https://'.$domain.'/oltp/HANDLER_INTERNAL/TXNSTATUS';
+		$this->paytm_txn_status_new_url = 'https://'.$domain.'/oltp/HANDLER_INTERNAL/getTxnStatus';
 		$this->paytm_refund_url = 'https://'.$domain.'/oltp/HANDLER_INTERNAL/REFUND';
 		$this->paytm_balance_check = 'https://'.$domain.'/oltp/HANDLER_INTERNAL/checkBalance';
 
@@ -67,6 +69,24 @@ class PaytmWalletProvider{
 			'Content-Length: ' . strlen($postData))                                                                       
 		);  
 		$jsonResponse = curl_exec($ch);   
+		return $responseParamList = json_decode($jsonResponse,true);
+	}
+	public function new_api_call($url, $params){
+		$jsonResponse = "";
+		$responseParamList = array();
+		$JsonData =json_encode($params);
+		$postData = 'JsonData='.urlencode($JsonData);
+		$ch = curl_init($url);
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt ($ch, CURLOPT_SSL_VERIFYHOST, 0);
+		curl_setopt ($ch, CURLOPT_SSL_VERIFYPEER, 0);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+				'Content-Type: application/json',
+				'Content-Length: ' . strlen($postData))
+		);
+		$jsonResponse = curl_exec($ch);
 		return $responseParamList = json_decode($jsonResponse,true);
 	}
 
